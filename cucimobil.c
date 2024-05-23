@@ -17,13 +17,14 @@ void mainmenu(int *pilihan) {
     scanf("%d", pilihan);
 }
 
-void tambah_mobil(int jenis_pelayanan, int golongan, int jenis_paket) {
+void tambah_mobil(int jenis_pelayanan, int golongan, int jenis_paket, char *plat, waktu_datang waktu) {
     data_mobil *baru = (data_mobil *)malloc(sizeof(data_mobil));
+    strcpy(baru->plat, plat);
     baru->jenis_paket = jenis_paket;
     baru->jenis_pelayanan = jenis_pelayanan;
     baru->golongan = golongan;
     baru->next = NULL;
-    
+
     queue_mobil *q = (jenis_pelayanan == 1) ? fast : reguler;
     if (q->depan == NULL) {
         q->depan = baru;
@@ -38,18 +39,20 @@ void masuk_antrian(int *pilihan) {
     int jenis_paket = 0, jenis_pelayanan = 0, golongan = 0;
     char c;
     char plat[10];
+    waktu_datang waktu;
+
     system("cls");
     printf("Jenis pelayanan:\n");
     printf("1. Fast track\n");
     printf("2. Reguler\n");
     printf("Pilih jenis pelayanan: ");
     scanf("%d", &jenis_pelayanan);
-    
+
     system("cls");
     printf("Apakah anda ingin menggunakan layanan tambahan? (y/n): ");
-    scanf(" %c", &c); 
+    scanf(" %c", &c);
 
-    if(c == 'y' || c == 'Y') {
+    if (c == 'y' || c == 'Y') {
         system("cls");
         printf("Layanan tambahan:\n");
         printf("1. Interior\n");
@@ -59,11 +62,12 @@ void masuk_antrian(int *pilihan) {
         printf("Pilih layanan tambahan anda: ");
         scanf("%d", &jenis_paket);
     } else if (c == 'n' || c == 'N') {
-    		printf("Anda tidak menggunakan layanan tambahan\n");
-		} else {
-			printf("Pilihan tidak valid");
-		}
-		
+        printf("Anda tidak menggunakan layanan tambahan\n");
+    } else {
+        printf("Pilihan tidak valid\n");
+        return;
+    }
+
     system("cls");
     printf("Golongan mobil\n");
     printf("1. Golongan 1 : sedan, lcgc, city car, hatchback\n");
@@ -73,13 +77,68 @@ void masuk_antrian(int *pilihan) {
     scanf("%d", &golongan);
     printf("Masukkan nopol mobil anda\n");
     fflush(stdin);
-    printf("Nopol :");
-    scanf("%[^\n]", &plat);
-    
-    bikin_struk(plat, golongan, jenis_paket, jenis_pelayanan);
+    printf("Nopol: ");
+    scanf("%[^\n]", plat);
 
-    tambah_mobil(jenis_pelayanan, golongan, jenis_paket);
+    printf("Masukkan waktu kedatangan (Jam:Menit): ");
+    scanf("%d:%d", &waktu.jam, &waktu.menit);
+
+    if (!validasi_waktu_datang(waktu.jam, waktu.menit)) {
+        printf("Waktu kedatangan di luar jam operasional (9:00 - 15:00). Tidak bisa menambahkan antrian.\n");
+        space_to_continue();
+        return;
+    }
+
+    sesuaikan_waktu_istirahat(&waktu);
+    bikin_struk(plat, golongan, jenis_paket, jenis_pelayanan, waktu);
+    tambah_mobil(jenis_pelayanan, golongan, jenis_paket, plat, waktu);
     space_to_continue();
+}
+
+waktu_datang hitung_estimasi_selesai(waktu_datang waktu, int jenis_pelayanan, int golongan) {
+    waktu_datang selesai = waktu;
+    int durasi = 0;
+
+    // Asumsi durasi berdasarkan jenis pelayanan dan golongan
+    if (jenis_pelayanan == 1) { // Fast track
+        if (golongan == 1) durasi = 30;
+        else if (golongan == 2) durasi = 45;
+        else if (golongan == 3) durasi = 60;
+    } else if (jenis_pelayanan == 2) { // Reguler
+        if (golongan == 1) durasi = 60;
+        else if (golongan == 2) durasi = 90;
+        else if (golongan == 3) durasi = 120;
+    }
+
+    selesai.menit += durasi;
+    if (selesai.menit >= 60) {
+        selesai.jam += selesai.menit / 60;
+        selesai.menit %= 60;
+    }
+
+    if (selesai.jam == 12 && selesai.menit <= 15) {
+        // Jika estimasi waktu selesai tidak lebih dari pukul 12:15, kembalikan estimasi tersebut
+        return selesai;
+    } else {
+        // Jika melewati waktu 12:15, set waktu kedatangan menjadi 13:00
+        selesai.jam = 13;
+        selesai.menit = 0;
+        return selesai;
+    }
+}
+
+int validasi_waktu_datang(int jam, int menit) {
+    if (jam < 9 || (jam >= 15 && menit > 0) || jam > 15) {
+        return 0; // Tidak valid, di luar jam operasional
+    }
+    return 1; // Valid
+}
+
+void sesuaikan_waktu_istirahat(waktu_datang *waktu) {
+    if (waktu->jam == 12 || (waktu->jam == 13 && waktu->menit == 0)) {
+        waktu->jam = 13;
+        waktu->menit = 0; // Set waktu kedatangan ke 13:00 jika datang pada jam istirahat
+    }
 }
 
 void buat_queue() {
@@ -106,12 +165,13 @@ void show_queue(queue_mobil *q) {
 }
 
                    
-void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan) {
+void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan, waktu_datang waktu) {
     struk s;
     strcpy(s.plat, plat);
     s.golongan = golongan;
     s.jenis_paket = jenis_paket;
     s.jenis_pelayanan = jenis_pelayanan;
+    s.waktu = waktu;
 
     // Hitung harga berdasarkan golongan dan jenis paket
     if (golongan == 1) {
@@ -132,10 +192,8 @@ void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan)
         s.harga += 100000;
     }
 
-    // Input waktu kedatangan
-    waktu_datang waktu;
-    printf("Masukkan waktu kedatangan (Jam:Menit): ");
-    scanf("%d:%d", &waktu.jam, &waktu.menit);
+    // Hitung estimasi waktu selesai
+    s.estimasi_selesai = hitung_estimasi_selesai(s.waktu, s.jenis_pelayanan, s.golongan);
 
     printf("\t Struk: \n");
     printf("Nopol: %s\n", s.plat);
@@ -143,7 +201,8 @@ void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan)
     printf("Jenis paket: %d\n", s.jenis_paket);
     printf("Jenis pelayanan: %d\n", s.jenis_pelayanan);
     printf("Harga: %d\n", s.harga);
-    printf("Waktu kedatangan: %02d:%02d\n", waktu.jam, waktu.menit);
+    printf("Waktu kedatangan: %02d:%02d\n", s.waktu.jam, s.waktu.menit);
+    printf("Estimasi selesai: %02d:%02d\n", s.estimasi_selesai.jam, s.estimasi_selesai.menit);
 
     // Buka file untuk menulis
     FILE *file = fopen("struk.txt", "a");
@@ -153,36 +212,35 @@ void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan)
     }
 
     // Tulis data ke file
-    fprintf(file, "%s,%d,%d,%d,%d,%02d:%02d\n", s.plat, s.golongan, s.jenis_paket, s.jenis_pelayanan, s.harga, waktu.jam, waktu.menit);
+    fprintf(file, "%s,%d,%d,%d,%d,%02d:%02d,%02d:%02d\n", s.plat, s.golongan, s.jenis_paket, s.jenis_pelayanan, s.harga, s.waktu.jam, s.waktu.menit, s.estimasi_selesai.jam, s.estimasi_selesai.menit);
 
     // Tutup file
     fclose(file);
 }
 
-
-void show_struk_from_file() {
-    FILE *file = fopen("struk.txt", "r"); // Open file in read mode
+void save_struk_to_file(struk s) {
+    FILE *file = fopen("struk.txt", "a");
     if (file == NULL) {
-        printf("Error opening file!\n");
+        printf("Gagal membuka file!\n");
         return;
     }
 
-    char line[100]; // Assuming each line in the file is no longer than 100 characters
-    printf("Struk Data:\n");
-    while (fgets(line, sizeof(line), file) != NULL) {
-        // Split the line into tokens based on the delimiter (comma in this case)
-        char *plat = strtok(line, ",");
-        int golongan = atoi(strtok(NULL, ","));
-        int jenis_paket = atoi(strtok(NULL, ","));
-        int jenis_pelayanan = atoi(strtok(NULL, ","));
-        int harga = atoi(strtok(NULL, ","));
-        char *waktu_kedatangan = strtok(NULL, ",");
+    fprintf(file, "%s,%d,%d,%d,%d,%02d:%02d,%02d:%02d\n", s.plat, s.golongan, s.jenis_paket, s.jenis_pelayanan, s.harga, s.waktu.jam, s.waktu.menit, s.estimasi_selesai.jam, s.estimasi_selesai.menit);
+    fclose(file);
+}
 
-        // Print the struk data
-        printf("Nopol: %s, Golongan: %d, Jenis Paket: %d, Jenis Pelayanan: %d, Harga: %d, Waktu Kedatangan: %s\n", plat, golongan, jenis_paket, jenis_pelayanan, harga, waktu_kedatangan);
+void show_struk_from_file() {
+    FILE *file = fopen("struk.txt", "r");
+    if (file == NULL) {
+        printf("Gagal membuka file!\n");
+        return;
     }
 
-    fclose(file); // Close the file
+    char line[100];
+    while (fgets(line, sizeof(line), file)) {
+        printf("%s", line);
+    }
+    fclose(file);
 }
 
 void space_to_continue() {
@@ -193,169 +251,145 @@ void space_to_continue() {
 
 // Fungsi untuk mencari data cucian berdasarkan nomor polisi
 data_mobil *cari_mobil(char *plat) {
-    // Cari pada antrian fast track
-    data_mobil *current = fast[0].depan;
-    while (current != NULL) {
-        if (strcmp(current->plat, plat) == 0) {
-            return current;
+    data_mobil *current;
+    int i = 0;
+    while (i < 1) {
+        current = fast[i].depan;
+        while (current != NULL) {
+            if (strcmp(current->plat, plat) == 0) {
+                return current;
+            }
+            current = current->next;
         }
-        current = current->next;
-    }
 
-    // Cari pada antrian reguler
-    current = reguler[0].depan;
-    while (current != NULL) {
-        if (strcmp(current->plat, plat) == 0) {
-            return current;
+        current = reguler[i].depan;
+        while (current != NULL) {
+            if (strcmp(current->plat, plat) == 0) {
+                return current;
+            }
+            current = current->next;
         }
-        current = current->next;
+        i++;
     }
-
-    return NULL; // Data tidak ditemukan
+    return NULL;
 }
 
 // Fungsi untuk menghitung total harga cucian berdasarkan nomor polisi
 int hitung_total_harga(char *plat) {
     data_mobil *mobil = cari_mobil(plat);
-    if (mobil != NULL) {
-        // Hitung total harga berdasarkan jenis paket dan golongan
-        int harga = 0;
-        if (mobil->golongan == 1) {
-            harga += 50000;
-        } else if (mobil->golongan == 2) {
-            harga += 75000;
-        } else if (mobil->golongan == 3) {
-            harga += 100000;
-        }
-        if (mobil->jenis_paket == 1) {
-            harga += 25000;
-        } else if (mobil->jenis_paket == 2) {
-            harga += 50000;
-        } else if (mobil->jenis_paket == 3) {
-            harga += 75000;
-        } else if (mobil->jenis_paket == 4) {
-            harga += 100000;
-        }
-        return harga;
+    if (mobil == NULL) {
+        printf("Mobil dengan nopol %s tidak ditemukan\n", plat);
+        return 0;
     }
-    return -1; // Mobil tidak ditemukan
+
+    int harga = 0;
+    if (mobil->golongan == 1) {
+        harga = 50000;
+    } else if (mobil->golongan == 2) {
+        harga = 75000;
+    } else if (mobil->golongan == 3) {
+        harga = 100000;
+    }
+
+    if (mobil->jenis_paket == 1) {
+        harga += 25000;
+    } else if (mobil->jenis_paket == 2) {
+        harga += 50000;
+    } else if (mobil->jenis_paket == 3) {
+        harga += 75000;
+    } else if (mobil->jenis_paket == 4) {
+        harga += 100000;
+    }
+
+    return harga;
 }
 
-// Fungsi untuk menghapus data cucian dari antrian setelah proses checkout
 void hapus_mobil(char *plat) {
-    data_mobil *prev = NULL;
-    data_mobil *current = fast[0].depan;
-    while (current != NULL) {
-        if (strcmp(current->plat, plat) == 0) {
-            if (prev != NULL) {
-                prev->next = current->next;
-            } else {
-                fast[0].depan = current->next;
+    int i = 0;
+    while (i < 1) {
+        data_mobil *current = fast[i].depan;
+        data_mobil *prev = NULL;
+        while (current != NULL) {
+            if (strcmp(current->plat, plat) == 0) {
+                if (prev == NULL) {
+                    fast[i].depan = current->next;
+                } else {
+                    prev->next = current->next;
+                }
+                if (current == fast[i].belakang) {
+                    fast[i].belakang = prev;
+                }
+                free(current);
+                return;
             }
-            free(current);
-            return;
+            prev = current;
+            current = current->next;
         }
-        prev = current;
-        current = current->next;
-    }
 
-    prev = NULL;
-    current = reguler[0].depan;
-    while (current != NULL) {
-        if (strcmp(current->plat, plat) == 0) {
-            if (prev != NULL) {
-                prev->next = current->next;
-            } else {
-                reguler[0].depan = current->next;
+        current = reguler[i].depan;
+        prev = NULL;
+        while (current != NULL) {
+            if (strcmp(current->plat, plat) == 0) {
+                if (prev == NULL) {
+                    reguler[i].depan = current->next;
+                } else {
+                    prev->next = current->next;
+                }
+                if (current == reguler[i].belakang) {
+                    reguler[i].belakang = prev;
+                }
+                free(current);
+                return;
             }
-            free(current);
-            return;
+            prev = current;
+            current = current->next;
         }
-        prev = current;
-        current = current->next;
+        i++;
     }
 }
 
 void checkout() {
     char plat[10];
-    int jumlah_bayar;
+    printf("Masukkan nopol mobil: ");
+    scanf("%s", plat);
 
-    system("cls");
-    printf("Masukkan nomor polisi: ");
-    fflush(stdin);
-    scanf("%[^\n]", plat);
-
-    FILE *file = fopen("struk.txt", "r"); // Buka file dalam mode baca
-    if (file == NULL) {
-        printf("Error opening file!\n");
+    int total_harga = hitung_total_harga(plat);
+    if (total_harga == 0) {
+        printf("Mobil tidak ditemukan\n");
         return;
     }
 
-    char line[100];
-    int found = 0;
-    while (fgets(line, sizeof(line), file) != NULL) { // Membaca setiap baris dari file
-        char plat_file[10]; // Menyimpan nomor polisi dari file
-        char *token = strtok(line, ",");
-        strcpy(plat_file, token); // Menyalin nomor polisi dari file
-        if (strcmp(plat, plat_file) == 0) { // Jika nomor polisi cocok
-            found = 1;
-            int golongan = atoi(strtok(NULL, ","));
-            int jenis_paket = atoi(strtok(NULL, ","));
-            int jenis_pelayanan = atoi(strtok(NULL, ","));
-            int harga = atoi(strtok(NULL, ","));
-            char *waktu_kedatangan = strtok(NULL, ",");
+    printf("Total harga: %d\n", total_harga);
+    printf("Checkout berhasil\n");
 
-            printf("Nopol: %s, Golongan: %d, Jenis Paket: %d, Jenis Pelayanan: %d, Harga: %d, Waktu Kedatangan: %s\n", plat_file, golongan, jenis_paket, jenis_pelayanan, harga, waktu_kedatangan);
-
-            // Input jumlah bayar
-            printf("Masukkan jumlah bayar: ");
-            scanf("%d", &jumlah_bayar);
-            // Hitung kembalian
-            int kembalian = jumlah_bayar - harga;
-            if (kembalian >= 0) {
-                printf("Kembalian: %d\n", kembalian);
-                printf("Checkout berhasil.\n");
-                fclose(file); // Tutup file sebelum menghapus struk
-                hapus_struk_dari_file(plat); // Hapus struk dari file
-                return; // Keluar dari fungsi setelah checkout berhasil
-            } else {
-                printf("Jumlah bayar kurang.\n");
-                fclose(file); // Tutup file sebelum keluar dari fungsi
-                return; // Keluar dari fungsi jika jumlah bayar kurang
-            }
-        }
-    }
-
-    if (!found) {
-        printf("Nomor polisi tidak ditemukan.\n");
-    }
-
-    fclose(file); // Tutup file setelah selesai membaca
+    hapus_mobil(plat);
+    hapus_struk_dari_file(plat);
 }
 
 void hapus_struk_dari_file(const char *plat) {
     FILE *file = fopen("struk.txt", "r");
-    FILE *temp = fopen("temp.txt", "w");
+    if (file == NULL) {
+        printf("Gagal membuka file!\n");
+        return;
+    }
 
-    if (file == NULL || temp == NULL) {
-        printf("Error opening file!\n");
+    FILE *temp = fopen("temp.txt", "w");
+    if (temp == NULL) {
+        printf("Gagal membuka file!\n");
+        fclose(file);
         return;
     }
 
     char line[100];
-    while (fgets(line, sizeof(line), file) != NULL) {
-        char plat_file[10];
-        char *token = strtok(line, ",");
-        strcpy(plat_file, token);
-        if (strcmp(plat, plat_file) != 0) {
-            fprintf(temp, "%s", line); // Tulis baris ke file temp jika plat tidak cocok
+    while (fgets(line, sizeof(line), file)) {
+        if (strstr(line, plat) == NULL) {
+            fputs(line, temp);
         }
     }
 
     fclose(file);
     fclose(temp);
 
-    remove("struk.txt"); // Hapus file asli
-    rename("temp.txt", "struk.txt"); // Ganti nama file temp ke nama file asli
+    remove("struk.txt");
+    rename("temp.txt", "struk.txt");
 }
-
