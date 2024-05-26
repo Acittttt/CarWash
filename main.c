@@ -14,10 +14,8 @@ int main(){
                 break;
             }
             case 2:{
-                printf("Antrian Fast Track:\n");
-                show_queue(&fast[0]);
-                printf("Antrian Reguler:\n");
-                show_queue(&reguler[0]);
+                printf("Antrian Mobil:\n");
+				show_struk_from_file();
                 space_to_continue();
                 break;
             }
@@ -27,7 +25,7 @@ int main(){
                 break;
             }
             case 4:{
-                show_struk_from_file();
+                show_riwayat_from_file();
                 space_to_continue();
                 break;
             }
