@@ -37,7 +37,7 @@ void show_queue(queue_mobil *q);
 void checkout();
 void show_struk_from_file();
 void show_riwayat_from_file();
-void space_to_continue();
+void enter_to_continue();
 int validasi_waktu_datang(int jam, int menit);
 void sesuaikan_waktu_istirahat(waktu_datang *waktu);
 void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan, waktu_datang waktu);

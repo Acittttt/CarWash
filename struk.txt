@@ -1,0 +1,3 @@
+Nopol: B 4 BI, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 13:00, Estimasi Selesai: 13:30
+Nopol: B 1234 A, Golongan: 1, Jenis Paket: 1, Jenis Pelayanan: 1, Harga: 75000, Waktu: 13:00, Estimasi Selesai: 13:15
+Nopol: B 1234 A, Golongan: 3, Jenis Paket: 2, Jenis Pelayanan: 1, Harga: 150000, Waktu: 13:00, Estimasi Selesai: 13:30

@@ -36,7 +36,11 @@ void masuk_antrian(int *pilihan) {
     printf("1. Fast track\n");
     printf("2. Reguler\n");
     printf("Pilih jenis pelayanan: ");
-    scanf("%d", &jenis_pelayanan);
+    if (scanf("%d", &jenis_pelayanan) != 1 || (jenis_pelayanan < 1 || jenis_pelayanan > 2)) {
+        printf("Pilihan tidak valid. Harus antara 1 atau 2.\n");
+        enter_to_continue();
+        return;
+    }
 
     system("cls");
     printf("Apakah anda ingin menggunakan layanan tambahan? (y/n): ");
@@ -50,39 +54,52 @@ void masuk_antrian(int *pilihan) {
         printf("3. Cuci mesin\n");
         printf("4. Paket lengkap\n");
         printf("Pilih layanan tambahan anda: ");
-        scanf("%d", &jenis_paket);
+        if (scanf("%d", &jenis_paket) != 1 || (jenis_paket < 1 || jenis_paket > 4)) {
+            printf("Pilihan tidak valid. Harus antara 1 sampai 4.\n");
+            enter_to_continue();
+            return;
+        }
     } else if (c == 'n' || c == 'N') {
         printf("Anda tidak menggunakan layanan tambahan\n");
     } else {
-        printf("Pilihan tidak valid\n");
+        printf("Pilihan tidak valid. Harus 'y' atau 'n'.\n");
+        enter_to_continue();
         return;
     }
 
     system("cls");
-    printf("Golongan mobil\n");
-    printf("1. Golongan 1 : sedan, lcgc, city car, hatchback\n");
-    printf("2. Golongan 2 : mpv\n");
-    printf("3. Golongan 3 : suv, minibus\n");
+    printf("Golongan mobil:\n");
+    printf("1. Golongan 1: sedan, lcgc, city car, hatchback\n");
+    printf("2. Golongan 2: mpv\n");
+    printf("3. Golongan 3: suv, minibus\n");
     printf("Pilih golongan mobil anda: ");
-    scanf("%d", &golongan);
-    printf("Masukkan nopol mobil anda\n");
+    if (scanf("%d", &golongan) != 1 || (golongan < 1 || golongan > 3)) {
+        printf("Pilihan tidak valid. Harus antara 1 sampai 3.\n");
+        enter_to_continue();
+        return;
+    }
+
+    printf("Masukkan nopol mobil anda: ");
     fflush(stdin);
-    printf("Nopol: ");
     scanf("%[^\n]", plat);
 
     printf("Masukkan waktu kedatangan (Jam:Menit): ");
-    scanf("%d:%d", &waktu.jam, &waktu.menit);
+    if (scanf("%d:%d", &waktu.jam, &waktu.menit) != 2) {
+        printf("Format waktu tidak valid. Gunakan format Jam:Menit.\n");
+        enter_to_continue();
+        return;
+    }
 
     if (!validasi_waktu_datang(waktu.jam, waktu.menit)) {
         printf("Waktu kedatangan di luar jam operasional (9:00 - 15:00). Tidak bisa menambahkan antrian.\n");
-        space_to_continue();
+        enter_to_continue();
         return;
     }
 
     sesuaikan_waktu_istirahat(&waktu);
     bikin_struk(plat, golongan, jenis_paket, jenis_pelayanan, waktu);
     tambah_mobil(jenis_pelayanan, golongan, jenis_paket, plat, waktu);
-    space_to_continue();
+    enter_to_continue();
 }
 
 void tambah_mobil(int jenis_pelayanan, int golongan, int jenis_paket, char *plat, waktu_datang waktu) {
@@ -103,20 +120,20 @@ void tambah_mobil(int jenis_pelayanan, int golongan, int jenis_paket, char *plat
     }
 }
 
-//void show_queue(queue_mobil *q) {
-//    if (q->depan == NULL) {
-//        printf("Kosong\n");
-//        return;
-//    }
-//    printf("Isi antrian:\n");
-//    data_mobil *current = q->depan;
-//    while (current != NULL) {
-//        printf("Nopol: %s, Golongan: %d, Jenis Paket: %d, Jenis Pelayanan: %d\n", current->plat, current->golongan, current->jenis_paket, current->jenis_pelayanan);
-//        current = current->next;
-//    }
-//}
-
 void show_queue(queue_mobil *q) {
+    if (q->depan == NULL) {
+        printf("Kosong\n");
+        return;
+    }
+    printf("Isi antrian:\n");
+    data_mobil *current = q->depan;
+    while (current != NULL) {
+        printf("Nopol: %s, Golongan: %d, Jenis Paket: %d, Jenis Pelayanan: %d\n", current->plat, current->golongan, current->jenis_paket, current->jenis_pelayanan);
+        current = current->next;
+    }
+}
+
+/*void show_queue(queue_mobil *q) {
     if (q->depan == NULL) {
         printf("Kosong\n");
         return;
@@ -130,7 +147,7 @@ void show_queue(queue_mobil *q) {
 
     printf("\nStruk dari file:\n");
     show_struk_from_file();
-}
+}*/
 
 
 void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan, waktu_datang waktu) {
@@ -251,7 +268,7 @@ void checkout() {
     char plat[10];
     printf("Masukkan nopol mobil yang ingin checkout: ");
     fflush(stdin);
-    scanf("%s", plat);
+    scanf("%[^\n]", plat);
 
     data_mobil *mobil = cari_mobil(plat);
     if (mobil == NULL) {
@@ -308,7 +325,7 @@ void show_riwayat_from_file() {
     fclose(fptr);
 }
 
-void space_to_continue() {
+void enter_to_continue() {
     printf("Tekan enter untuk melanjutkan...");
     while (getchar() != '\n');
     getchar();

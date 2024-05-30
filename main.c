@@ -14,28 +14,32 @@ int main(){
                 break;
             }
             case 2:{
+            	system("cls");
                 printf("Antrian Mobil:\n");
 				show_struk_from_file();
-                space_to_continue();
+                enter_to_continue();
                 break;
             }
             case 3:{
+            	system("cls");
                 checkout();
-                space_to_continue();
                 break;
             }
             case 4:{
+            	system("cls");
                 show_riwayat_from_file();
-                space_to_continue();
+                enter_to_continue();
                 break;
             }
             case 5:{
+            	system("cls");
                 printf("Terima kasih\n");
                 break;
             }
             default:
                 printf("Pilihan tidak valid\n");
-                space_to_continue();
+                enter_to_continue();
+                fflush(stdin);
                 break;
         }
     }

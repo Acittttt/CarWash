@@ -1,13 +1,6 @@
-Nopol: B 1234 Qw, Golongan: 1, Jenis Paket: 1, Jenis Pelayanan: 1, Harga: 75000, Waktu: 09:20, Estimasi Selesai: 09:35
-Nopol: Y 1234 QW, Golongan: 2, Jenis Paket: 3, Jenis Pelayanan: 1, Harga: 150000, Waktu: 13:00, Estimasi Selesai: 13:22
-Nopol: P 1234, Golongan: 1, Jenis Paket: 1, Jenis Pelayanan: 1, Harga: 75000, Waktu: 13:00, Estimasi Selesai: 13:15
-Nopol: q 1234 r, Golongan: 2, Jenis Paket: 3, Jenis Pelayanan: 1, Harga: 150000, Waktu: 13:00, Estimasi Selesai: 13:22
-Nopol: A 1234 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 13:00, Estimasi Selesai: 13:30
-Nopol: O 1234 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 09:00, Estimasi Selesai: 09:15
-Nopol: V 1234 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 10:10, Estimasi Selesai: 10:40
-Nopol: Q 1234 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 13:00, Estimasi Selesai: 13:15
-Nopol: R 1234 QW, Golongan: 1, Jenis Paket: 1, Jenis Pelayanan: 1, Harga: 75000, Waktu: 13:00, Estimasi Selesai: 13:15
-Nopol: G 1234 QW, Golongan: 2, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 75000, Waktu: 09:19, Estimasi Selesai: 10:04
-Nopol: Q 1111 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 13:00, Estimasi Selesai: 13:15
-Nopol: T 1111 Qw, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 13:00, Estimasi Selesai: 13:30
-Nopol: R 1111 QW, Golongan: 2, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 75000, Waktu: 09:20, Estimasi Selesai: 09:42
+Nopol: B 1234 A, Golongan: 1, Jenis Paket: 4, Jenis Pelayanan: 1, Harga: 150000, Waktu: 13:00, Estimasi Selesai: 13:15
+Nopol: B 4 BI, Golongan: 1, Jenis Paket: 1, Jenis Pelayanan: 1, Harga: 75000, Waktu: 13:00, Estimasi Selesai: 13:15
+Nopol: B 1234 A, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 13:00, Estimasi Selesai: 13:15
+Nopol: B 4 BI, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 13:00, Estimasi Selesai: 13:30
+Nopol: B 1234 A, Golongan: 1, Jenis Paket: 1, Jenis Pelayanan: 1, Harga: 75000, Waktu: 13:00, Estimasi Selesai: 13:15
+Nopol: B 1234 A, Golongan: 3, Jenis Paket: 2, Jenis Pelayanan: 1, Harga: 150000, Waktu: 13:00, Estimasi Selesai: 13:30
