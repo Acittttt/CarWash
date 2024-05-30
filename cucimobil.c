@@ -527,11 +527,10 @@ waktu_datang hitung_estimasi_selesai(waktu_datang waktu, int jenis_pelayanan, in
 
 waktu_datang get_last_finish_time(queue_mobil *q) {
     if (q->belakang == NULL) {
-        waktu_datang no_mobil = {0, 0}; // If no car is present, return 00:00
+        waktu_datang no_mobil = {0, 0};
         return no_mobil;
     }
 
-    // Read struk.txt to find the finish time of the last car in the queue
     FILE *fptr;
     char buffer[256];
     waktu_datang last_finish = {0, 0};
@@ -543,7 +542,6 @@ waktu_datang get_last_finish_time(queue_mobil *q) {
     }
 
     while (fgets(buffer, 256, fptr) != NULL) {
-        // Assuming the format "..., Estimasi Selesai: hh:mm\n"
         char *pos = strstr(buffer, "Estimasi Selesai: ");
         if (pos != NULL) {
             sscanf(pos, "Estimasi Selesai: %d:%d\n", &last_finish.jam, &last_finish.menit);
