@@ -15,7 +15,8 @@ int main(){
             }
             case 2:{
             	system("cls");
-                printf("Antrian Mobil:\n");
+            	title();
+                printf("\nAntrian Mobil:\n");
 				show_struk_from_file();
                 enter_to_continue();
                 break;
@@ -27,6 +28,7 @@ int main(){
             }
             case 4:{
             	system("cls");
+            	title();
                 show_riwayat_from_file();
                 enter_to_continue();
                 break;

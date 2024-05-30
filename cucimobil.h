@@ -49,6 +49,7 @@ void hapus_mobil(char *plat);
 void hapus_struk_dari_file(const char *plat);
 waktu_datang hitung_estimasi_selesai(waktu_datang waktu, int jenis_pelayanan, int golongan);
 waktu_datang get_last_finish_time(queue_mobil *q);
+void title();
 
 extern queue_mobil fast[1];
 extern queue_mobil reguler[1];

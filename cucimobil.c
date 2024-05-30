@@ -7,8 +7,10 @@ queue_mobil fast[1];
 queue_mobil reguler[1];
 
 void mainmenu(int *pilihan) {
+    
     system("cls");
-    printf("SELAMAT DATANG DI TEMPAT CUCI MOBIL ...\n");
+    title();
+    printf("\nSELAMAT DATANG DI 3R CARWASH\n");
     printf("1. Masuk antrian\n");
     printf("2. Lihat antrian\n");
     printf("3. Checkout\n");
@@ -32,7 +34,8 @@ void masuk_antrian(int *pilihan) {
     waktu_datang waktu;
 
     system("cls");
-    printf("Jenis pelayanan:\n");
+    title();
+    printf("\nJenis pelayanan:\n");
     printf("1. Fast track\n");
     printf("2. Reguler\n");
     printf("Pilih jenis pelayanan: ");
@@ -43,12 +46,14 @@ void masuk_antrian(int *pilihan) {
     }
 
     system("cls");
-    printf("Apakah anda ingin menggunakan layanan tambahan? (y/n): ");
+    title();
+    printf("\nApakah anda ingin menggunakan layanan tambahan? (y/n): ");
     scanf(" %c", &c);
 
     if (c == 'y' || c == 'Y') {
         system("cls");
-        printf("Layanan tambahan:\n");
+        title();
+        printf("\nLayanan tambahan:\n");
         printf("1. Interior\n");
         printf("2. Coating\n");
         printf("3. Cuci mesin\n");
@@ -68,7 +73,8 @@ void masuk_antrian(int *pilihan) {
     }
 
     system("cls");
-    printf("Golongan mobil:\n");
+    title();
+    printf("\nGolongan mobil:\n");
     printf("1. Golongan 1: sedan, lcgc, city car, hatchback\n");
     printf("2. Golongan 2: mpv\n");
     printf("3. Golongan 3: suv, minibus\n");
@@ -104,6 +110,8 @@ void masuk_antrian(int *pilihan) {
     }
 
     sesuaikan_waktu_istirahat(&waktu);
+    system("cls");
+    title();
     bikin_struk(plat, golongan, jenis_paket, jenis_pelayanan, waktu);
     tambah_mobil(jenis_pelayanan, golongan, jenis_paket, plat, waktu);
     enter_to_continue();
@@ -271,29 +279,58 @@ void save_riwayat_to_file(struk s) {
 //    printf("Mobil dengan nopol %s berhasil di-checkout.\n", plat);
 //}
 
+//void checkout() {
+//    char plat[10];
+//    printf("Masukkan nopol mobil yang ingin checkout: ");
+//    fflush(stdin);
+//    scanf("%[^\n]", plat);
+//
+//    data_mobil *mobil = cari_mobil(plat);
+//    if (mobil == NULL) {
+////        printf("Mobil tidak ditemukan dalam antrian.\n");
+//        printf("Anda yakin ingin menghapus struk untuk mobil dengan nopol %s? (y/n): ", plat);
+//        char confirm;
+//        scanf(" %c", &confirm);
+//        if (confirm == 'y' || confirm == 'Y') {
+//        	hapus_mobil(plat);
+//            hapus_struk_dari_file(plat);
+//            printf("Struk untuk mobil dengan nopol %s berhasil dihapus.\n", plat);
+//        }
+//        return;
+//    }
+//
+//    int total_harga = hitung_total_harga(plat);
+//    if (total_harga == -1) {
+//        printf("Terjadi kesalahan dalam menghitung total harga.\n");
+//        return;
+//    }
+//    printf("Total harga untuk mobil dengan nopol %s adalah %d\n", plat, total_harga);
+//
+//    hapus_mobil(plat);
+//    hapus_struk_dari_file(plat);
+//    printf("Mobil dengan nopol %s berhasil di-checkout.\n", plat);
+//    enter_to_continue();
+//}
+//
+
 void checkout() {
     char plat[10];
-    printf("Masukkan nopol mobil yang ingin checkout: ");
+    title();
+    printf("\nMasukkan nopol mobil yang ingin checkout: ");
     fflush(stdin);
     scanf("%[^\n]", plat);
 
     data_mobil *mobil = cari_mobil(plat);
     if (mobil == NULL) {
-//        printf("Mobil tidak ditemukan dalam antrian.\n");
-        printf("Anda yakin ingin menghapus struk untuk mobil dengan nopol %s? (y/n): ", plat);
-        char confirm;
-        scanf(" %c", &confirm);
-        if (confirm == 'y' || confirm == 'Y') {
-        	hapus_mobil(plat);
-            hapus_struk_dari_file(plat);
-            printf("Struk untuk mobil dengan nopol %s berhasil dihapus.\n", plat);
-        }
+        printf("Mobil dengan nopol %s tidak ditemukan dalam antrian. Checkout gagal.\n", plat);
+        enter_to_continue();
         return;
     }
 
     int total_harga = hitung_total_harga(plat);
     if (total_harga == -1) {
         printf("Terjadi kesalahan dalam menghitung total harga.\n");
+        enter_to_continue();
         return;
     }
     printf("Total harga untuk mobil dengan nopol %s adalah %d\n", plat, total_harga);
@@ -301,11 +338,12 @@ void checkout() {
     hapus_mobil(plat);
     hapus_struk_dari_file(plat);
     printf("Mobil dengan nopol %s berhasil di-checkout.\n", plat);
+    enter_to_continue();
 }
 
 
 void show_struk_from_file() {
-    FILE *fptr;
+	FILE *fptr;
     char c;
     fptr = fopen("struk.txt", "r");
     if (fptr == NULL) {
@@ -319,7 +357,8 @@ void show_struk_from_file() {
 }
 
 void show_riwayat_from_file() {
-    FILE *fptr;
+    printf("\n");
+	FILE *fptr;
     char c;
     fptr = fopen("riwayat.txt", "r");
     if (fptr == NULL) {
@@ -368,6 +407,30 @@ void sesuaikan_waktu_istirahat(waktu_datang *waktu) {
 //        }
 //        current = current->next;
 //    }
+//    return NULL;
+//}
+
+//data_mobil *cari_mobil(char *plat) {
+//    data_mobil *current;
+//
+//    // Cari di antrian fast
+//    current = fast[0].depan;
+//    while (current != NULL) {
+//        if (strcmp(current->plat, plat) == 0) {
+//            return current;
+//        }
+//        current = current->next;
+//    }
+//
+//    // Cari di antrian reguler
+//    current = reguler[0].depan;
+//    while (current != NULL) {
+//        if (strcmp(current->plat, plat) == 0) {
+//            return current;
+//        }
+//        current = current->next;
+//    }
+//
 //    return NULL;
 //}
 
@@ -527,10 +590,11 @@ waktu_datang hitung_estimasi_selesai(waktu_datang waktu, int jenis_pelayanan, in
 
 waktu_datang get_last_finish_time(queue_mobil *q) {
     if (q->belakang == NULL) {
-        waktu_datang no_mobil = {0, 0};
+        waktu_datang no_mobil = {0, 0}; // If no car is present, return 00:00
         return no_mobil;
     }
 
+    // Read struk.txt to find the finish time of the last car in the queue
     FILE *fptr;
     char buffer[256];
     waktu_datang last_finish = {0, 0};
@@ -542,6 +606,7 @@ waktu_datang get_last_finish_time(queue_mobil *q) {
     }
 
     while (fgets(buffer, 256, fptr) != NULL) {
+        // Assuming the format "..., Estimasi Selesai: hh:mm\n"
         char *pos = strstr(buffer, "Estimasi Selesai: ");
         if (pos != NULL) {
             sscanf(pos, "Estimasi Selesai: %d:%d\n", &last_finish.jam, &last_finish.menit);
@@ -550,4 +615,20 @@ waktu_datang get_last_finish_time(queue_mobil *q) {
 
     fclose(fptr);
     return last_finish;
+}
+
+void title(){
+	FILE *file = fopen("icon.txt", "r");
+    if (file == NULL) {
+        fprintf(stderr, "Gagal membuka file list_barang.txt.\n");
+        return;
+    }
+
+    char buffer[256];
+    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+		printf(" %s", buffer);
+    }
+    printf("\n");
+
+    fclose(file);
 }

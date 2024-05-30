@@ -1,13 +1,2 @@
-Nopol: D 45 EP, Golongan: 2, Jenis Paket: 1, Jenis Pelayanan: 1, Harga: 100000, Waktu: 10:55, Estimasi Selesai: 11:17
-Nopol: A 4 LA, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 11:20, Estimasi Selesai: 11:50
-Nopol: D 1 O, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 10:25, Estimasi Selesai: 10:40
-Nopol: D 14 M, Golongan: 2, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 75000, Waktu: 10:25, Estimasi Selesai: 11:10
-Nopol: D 1 A, Golongan: 2, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 75000, Waktu: 11:00, Estimasi Selesai: 11:45
-Nopol: D 123 A, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 11:45, Estimasi Selesai: 13:00
-Nopol: B 123 A, Golongan: 2, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 75000, Waktu: 13:00, Estimasi Selesai: 13:45
-Nopol: A 12 I, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 13:45, Estimasi Selesai: 14:15
-Nopol: Z 1 KIR, Golongan: 3, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 100000, Waktu: 14:00, Estimasi Selesai: 15:00
-Nopol: D 1 A, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 2, Harga: 50000, Waktu: 15:00, Estimasi Selesai: 15:30
-Nopol: Z 1 A, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 11:10, Estimasi Selesai: 11:25
-Nopol: D 13 T, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 11:25, Estimasi Selesai: 11:40
-Nopol: B 333 K, Golongan: 2, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 75000, Waktu: 11:40, Estimasi Selesai: 13:00
+Nopol: Q 123 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 09:10, Estimasi Selesai: 09:25
+Nopol: T 123 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 09:10, Estimasi Selesai: 09:25
