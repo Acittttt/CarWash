@@ -3,7 +3,6 @@
 
 // Main function
 int main(){
-	int id;
     int pilih = 0;
     buat_queue();
     while (pilih != 5) {
@@ -17,7 +16,10 @@ int main(){
             	system("cls");
             	title();
                 printf("\nAntrian Mobil:\n");
-				show_struk_from_file();
+                printf("Isi antrian fast track: \n");
+				show_queue(fast);
+				printf("\nIsi antrian reguler: \n");
+				show_queue(reguler);
                 enter_to_continue();
                 break;
             }

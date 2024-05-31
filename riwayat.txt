@@ -1,2 +1,0 @@
-Nopol: Q 123 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 09:10, Estimasi Selesai: 09:25
-Nopol: T 123 QW, Golongan: 1, Jenis Paket: 0, Jenis Pelayanan: 1, Harga: 50000, Waktu: 09:10, Estimasi Selesai: 09:25

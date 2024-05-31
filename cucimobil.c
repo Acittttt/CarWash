@@ -3,8 +3,8 @@
 #include <string.h>
 #include "cucimobil.h"
 
-queue_mobil fast[1];
-queue_mobil reguler[1];
+queue_mobil fast[0];
+queue_mobil reguler[0];
 
 void mainmenu(int *pilihan) {
     
@@ -23,6 +23,7 @@ void mainmenu(int *pilihan) {
 void buat_queue() {
     fast[0].depan = NULL;
     fast[0].belakang = NULL;
+    
     reguler[0].depan = NULL;
     reguler[0].belakang = NULL;
 }
@@ -140,9 +141,14 @@ void show_queue(queue_mobil *q) {
         printf("Kosong\n");
         return;
     }
-    printf("Isi antrian:\n");
     data_mobil *current = q->depan;
+    if (q->depan){
+    	printf("Mobil sedang dicuci: \n");
+    	printf("Nopol: %s, Golongan: %d, Jenis Paket: %d, Jenis Pelayanan: %d\n", current->plat, current->golongan, current->jenis_paket, current->jenis_pelayanan);
+    	current = current->next;
+	}
     while (current != NULL) {
+    	printf("Mobil dalam antrian: \n");
         printf("Nopol: %s, Golongan: %d, Jenis Paket: %d, Jenis Pelayanan: %d\n", current->plat, current->golongan, current->jenis_paket, current->jenis_pelayanan);
         current = current->next;
     }
@@ -198,6 +204,8 @@ void bikin_struk(char *plat, int golongan, int jenis_paket, int jenis_pelayanan,
     printf("Golongan: %d\n", s.golongan);
     printf("Jenis paket: %d\n", s.jenis_paket);
     printf("Jenis pelayanan: %d\n", s.jenis_pelayanan);
+    printf("Waktu masuk: %d:%d\n", s.waktu.jam, s.waktu.menit);
+    printf("Estimasi keluar: %d:%d\n", s.estimasi_selesai.jam, s.estimasi_selesai.menit);
     printf("Harga: %d\n", s.harga);
 
     save_struk_to_file(s);
