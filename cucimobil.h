@@ -11,6 +11,7 @@ typedef struct data_mobil {
     int golongan;
     int jenis_paket;
     int jenis_pelayanan;
+    waktu_datang waktu;
     struct data_mobil *next;
 } data_mobil;
 
